@@ -4,6 +4,7 @@ using namespace std;
 int main() {
 	bool program_run = true;
 	int selection;
+	int idHold = 000000;
 	cout << "Welcome to the Binary Search Tree (BST) Simulator. Please see the options below..." << endl << endl;
 	cout << "1 - INSERT - Inserts a given record into the BST." << endl;
 	cout << "2 - REMOVE - Removes a record with the given ID." << endl;
@@ -28,7 +29,10 @@ int main() {
 
 			break;
 		case 3:
-
+			cout << "Please enter the ID number you'd like to search for:  ";
+			cin >> idHold;
+			cout << endl;
+			find(idHold);
 			break;
 		case 4:
 

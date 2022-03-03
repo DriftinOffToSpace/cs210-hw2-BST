@@ -53,7 +53,9 @@ public:
      */
     const Employee& findMin() const
     {
-        return Employee();
+        if (isEmpty)
+            return Employee(-1);
+        return findMin(root);
     }
 
     /**
@@ -68,9 +70,9 @@ public:
     /**
      * Prints employee info if id found in tree
      */
-    bool find(const int id) const
+    bool find(int id)
     {
-        return false;
+        find(id, root);
     }
 
     /**
@@ -101,6 +103,7 @@ public:
      */
     void remove(const int id)
     {
+        remove(id);
     }
 
     /**
@@ -133,6 +136,85 @@ private:
      */
     void remove(const int id, BinaryNode*& t)
     {
+        // pointer to store the parent of the current node
+        BinaryNode* parent = nullptr;
+
+        // start with the root node
+        BinaryNode* curr = root;
+
+        // search key in the BST and set its parent pointer
+        find(id);
+
+        // return if the key is not found in the tree
+        if (curr == nullptr) {
+            return;
+        }
+
+        // Case 1: node to be deleted has no children, i.e., it is a leaf node
+        if (curr->left == nullptr && curr->right == nullptr)
+        {
+            // if the node to be deleted is not a root node, then set its
+            // parent left/right child to null
+            if (curr != root)
+            {
+                if (parent->left == curr) {
+                    parent->left = nullptr;
+                }
+                else {
+                    parent->right = nullptr;
+                }
+            }
+            // if the tree has only a root node, set it to null
+            else {
+                root = nullptr;
+            }
+
+            // deallocate the memory
+            free(curr);        // or delete curr;
+        }
+
+        // Case 2: node to be deleted has two children
+        else if (curr->left && curr->right)
+        {
+            // find its inorder successor node
+            BinaryNode* successor = findMin(curr->right);
+
+            // store successor value
+            int val = successor->element.id;
+
+            // recursively delete the successor. Note that the successor
+            // will have at most one child (right child)
+            delete(root, successor);
+
+            // copy value of the successor to the current node
+            curr->element.id = val;
+        }
+
+        // Case 3: node to be deleted has only one child
+        else {
+            // choose a child node
+            BinaryNode* child = (curr->left) ? curr->left : curr->right;
+
+            // if the node to be deleted is not a root node, set its parent
+            // to its child
+            if (curr != root)
+            {
+                if (curr == parent->left) {
+                    parent->left = child;
+                }
+                else {
+                    parent->right = child;
+                }
+            }
+
+            // if the node to be deleted is a root node, then set the root to the child
+            else {
+                root = child;
+            }
+
+            // deallocate the memory
+            free(curr);
+        }
     }
 
     /**
@@ -141,7 +223,11 @@ private:
      */
     BinaryNode* findMin(BinaryNode* t) const
     {
-        return new BinaryNode();
+        BinaryNode* current = t;
+        while (current->left != nullptr) {
+            current = current->left;
+        }
+        return current;
     }
 
     /**
@@ -160,7 +246,16 @@ private:
      */
     bool find(const int id, BinaryNode* t) const
     {
-        return false;
+            // Base Cases: root is null or key is present at root
+            if (root == NULL || root->element.id == id)
+                return root;
+
+            // Key is greater than root's key
+            if (root->element.id < id)
+                return find(id, root->right);
+
+            // Key is smaller than root's key
+            return find(id, root->left);
     }
 
     /**
