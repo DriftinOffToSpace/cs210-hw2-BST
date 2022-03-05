@@ -1,0 +1,6 @@
+Squashing commits in a Git project is generally done as a cleanup step.
+When people think of "squashing" commits, they generally think the commits are desroyed.
+What actually happens is that each commit is combined into one single commit, making for a cleaner commit history.
+
+You'd generally do this when you've got a team working on split projects, and need to merge a branch into the base.
+Commit history can get really messy, and this is a way to make commit history streamlined and clean.
